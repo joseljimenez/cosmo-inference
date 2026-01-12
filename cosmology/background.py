@@ -1,1 +1,0 @@
-# Here all the cosmology
