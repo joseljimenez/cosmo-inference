@@ -127,6 +127,45 @@ def chi2_BBN(Ob0, H0):
         f"chi2_BBN={chi2:.5f}"
     )
     return chi2
+#-----------------------------------------------------------------------
+# ---------------------------- CC  -------------------------------------
+#-----------------------------------------------------------------------
+
+# Load CC data
+CC = np.loadtxt(BASE_DIR / "data" / "CC" / "CC_data.dat")
+cov_matCC = np.load(BASE_DIR / "data" / "CC" / "cov_matCC.npy")
+
+z_CC    = CC[:, 0]
+H_obs   = CC[:, 1]
+
+# Redshift mask
+mask_CC = (z_CC <= b) & (z_CC > a)
+
+# Apply mask
+zbin_CC    = z_CC[mask_CC]
+Hbin_obs   = H_obs[mask_CC]
+covbin_CC  = cov_matCC[mask_CC, :][:, mask_CC]
+inv_covCC  = np.linalg.inv(covbin_CC)
+
+# Theoretical H(z)
+def H_theo_CC(Ob0, H0, As, alpha):
+    cosmo = Cosmology(Ob0, H0, As, alpha)
+    return np.array([cosmo.H(zi) for zi in zbin_CC])
+
+# Chi^2 for Cosmic Chronometers
+def chi2_CC(Ob0, H0, As, alpha):
+    delta = H_theo_CC(Ob0, H0, As, alpha) - Hbin_obs
+    chi2  = delta @ inv_covCC @ delta
+    return float(chi2)
+
+#-----------------------------------------------------------------------
+# ---------------------------- MEGAMASERS ------------------------------
+#-----------------------------------------------------------------------
+
+
+#-----------------------------------------------------------------------
+# ---------------------------- PLANCK  ---------------------------------
+#-----------------------------------------------------------------------
 
 
 def build_total_chi2():
@@ -140,6 +179,8 @@ def build_total_chi2():
         chi2 += chi2_BBN(Ob0, H0)
         # DESI BAO
         chi2 += chi2_DESI(Ob0, H0, As, alpha, rd)
+        # Cosmic Chronometers
+        chi2 += chi2_CC(Ob0, H0, As, alpha)
 
         return float(chi2)
 
