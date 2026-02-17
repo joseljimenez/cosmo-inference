@@ -120,12 +120,7 @@ BBN_sigma = np.sqrt(0.015**2 + 0.011**2)
 def chi2_BBN(Ob0, H0):
     h = H0 / 100.0
     Obh2 = 100.0 * Ob0 * h**2
-    chi2 = (Obh2 - BBN_mean)**2 / BBN_sigma**2
-    # logger.debug(
-    #     f"BBN prior | Ob0={Ob0:.5e}, H0={H0:.3f}, "
-    #     f"h={h:.5f}, 100*Ob0*h^2={Obh2:.5f}, "
-    #     f"chi2_BBN={chi2:.5f}"
-    # )
+    chi2 = (Obh2 - BBN_mean)**2 / BBN_sigma**2 
     return chi2
 #-----------------------------------------------------------------------
 # ---------------------------- CC  -------------------------------------
@@ -158,27 +153,17 @@ def chi2_CC(Ob0, H0, As, alpha):
     chi2  = delta @ inv_covCC @ delta
     return float(chi2)
 
-#-----------------------------------------------------------------------
-# ---------------------------- MEGAMASERS ------------------------------
-#-----------------------------------------------------------------------
-
-
-#-----------------------------------------------------------------------
-# ---------------------------- PLANCK  ---------------------------------
-#-----------------------------------------------------------------------
-
-
 def build_total_chi2():
-    param_names = ["Ob0", "H0", "As", "alpha", "M"] #Elimino BAO, rd
+    param_names = ["Ob0", "H0", "As", "alpha", "M", "rd"]
     def chi2_total(theta):
-        Ob0, H0, As, alpha, M= theta
+        Ob0, H0, As, alpha, M, rd = theta
         chi2 = 0.0
         # SNe Ia (Union3)
         chi2 += chi2_Union3(Ob0, H0, As, alpha, M)
         # BBN prior
         chi2 += chi2_BBN(Ob0, H0)
         # DESI BAO
-        # chi2 += chi2_DESI(Ob0, H0, As, alpha, rd)
+        chi2 += chi2_DESI(Ob0, H0, As, alpha, rd)
         # Cosmic Chronometers
         chi2 += chi2_CC(Ob0, H0, As, alpha)
 
