@@ -43,3 +43,4 @@ class Cosmology:
 
     def mb(self, z, M):
         return self.mu(z) + M
+    # Return the cosmology class
