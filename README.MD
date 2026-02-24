@@ -1,67 +1,44 @@
-# Cosmo-Inference
+# Cosmological Parameter Inference Pipeline
 
-Cosmo-Inference is a lightweight Bayesian framework for cosmological parameter estimation.  
-It constrains background cosmological models using observational data through MCMC sampling.
+Este pipeline end-to-end calcula la estadística \chi^2 total combinando distintos conjuntos de datos cosmológicos con el objetivo de evaluar la compatibilidad de un modelo teórico con las observaciones. En una etapa posterior, se utiliza un análisis MCMC para explorar el espacio de parámetros y obtener restricciones sobre los parámetros del modelo cosmológico mediante técnicas de ajuste estadístico. El 
 
-Currently implemented models:
-- ΛCDM
-- Generalized Chaplygin Gas (GCG)
+### Datasets utilizados
+    - Supernovas (Union3)
+    - BAO (Baryon Acoustic Oscillations)
+    - Cosmic Chronometers H(z)
 
----
+### Como usar
+- Instalar la librerías de python: numpy, astropy, pandas, scipy
+- Descargar los datos
+|`./data_download.sh`
+- Evaluar los likelihoods:
+`python evaluation.py`
+- Para hacer el sampling MCMC, abrir y ejecutar el notebook
+`emcee.ipynb`
 
-## Scientific Overview
+### `data_download.sh`
+Este fichero descarga datasets: Union3, BAO-DESI DR2 de repositorios oficiales
 
-The code performs parameter inference by fitting theoretical predictions of the Hubble expansion rate to observational datasets.
+### cosmology.py
+Contiene todas las ecuaciones de background cosmológico, ecuaciones de distancia implementadas mediante la ecuación de estado del Gas de Chaplygin.
 
-### ΛCDM Model
+### `likelihood.py`
+Define y calcula funciones \chi^2 individuales para cada conjunto de datos (Union3, BAO, Cronómetros Cósmicos) y luego regresa la función \chi^2_total.
 
-The Friedmann equation is given by:
-
-H²(z) = H0² [ Ωm (1+z)³ + ΩΛ ]
-
-Free parameters:
-- H0
-- Ωm
-
----
 
 ### Generalized Chaplygin Gas (GCG)
 
-Equation of state:
+Ecuación de Estado
 
 p = -A / ρ^α
 
-Energy density evolution:
+Evolución de la densidad de energía:
 
 ρ_GCG(z) = ρ0 [ As + (1 - As)(1+z)^{3(1+α)} ]^{1/(1+α)}
 
-Free parameters:
+Parámetros libres:
 - H0
 - As
 - α
 
-ΛCDM is recovered in the limit α → 0.
-
----
-
-## Observational Data
-
-The framework supports background cosmology datasets such as:
-
-- Type Ia Supernovae
-- Cosmic Chronometers H(z)
-- BAO measurements
-
-Each dataset contributes through a Gaussian likelihood.
-
----
-
-## Statistical Method
-
-Parameter estimation is performed via Bayesian inference using MCMC sampling.
-
-- Gaussian likelihoods
-- Flat priors on cosmological parameters
-- Modular sampler implementation
-
----
+ΛCDM se recupera en el límite α → 0.
