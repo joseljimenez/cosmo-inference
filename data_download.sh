@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd Data
+cd data
 
 # DESI data from the Cobaya repository
 git clone https://github.com/CobayaSampler/bao_data.git
@@ -14,10 +14,10 @@ git clone https://github.com/rubind/union3_release
 
 # Pantheon+ data from a repository by the Pantheon+SH0ES collaboration. 
 # The download also includes SH0ES 2022 data. https://arxiv.org/pdf/2112.04510
-git clone https://github.com/PantheonPlusSH0ES/DataRelease.git
-mv DataRelease PantheonPlusSH0ES
+# git clone https://github.com/PantheonPlusSH0ES/DataRelease.git
+# mv DataRelease PantheonPlusSH0ES
 
 
 
 # DES-SNe data from the DES-science repository
-git clone https://github.com/des-science/DES-SN5YR
+# git clone https://github.com/des-science/DES-SN5YR
